@@ -1,4 +1,4 @@
-import { helloWorld } from '@/hello';
+import { helloWorld } from '@/mpay';
 
 describe('hello', () => {
   it('test hello', () => {

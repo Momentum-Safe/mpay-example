@@ -49,8 +49,14 @@
   "scripts": {
     "build": "tsup --format cjs,esm --dts --clean",
     "test": "jest",
+    "start": "ts-node -r tsconfig-paths/register src/mpay.ts",
     "lint": "eslint . --ext .ts,.tsx",
     "lint-fix": "eslint . --ext .ts,.tsx --fix",
     "prerelease": "yarn build && chmod +x ./scripts/prerelease.sh && ./scripts/prerelease.sh"
+  },
+  "dependencies": {
+    "@msafe/mpay-sdk-sui": "^1.0.27",
+    "@mysten/sui.js": "^0.54.1",
+    "dotenv": "^16.4.5"
   }
 }
