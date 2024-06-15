@@ -35,14 +35,6 @@ export class LocalWallet implements ISingleWallet {
       transactionBlock: txb,
     });
   }
-
-  static getFromEnv(client: SuiClient) {
-    const hexPK = process.env.SUI_PRIVATE_KEY;
-    if (!hexPK) {
-      throw new Error('Missing private key in env:');
-    }
-    return new LocalWallet(client, hexPK);
-  }
 }
 
 export function makeKeyPairFromPrivateKey(privateKey: string) {
