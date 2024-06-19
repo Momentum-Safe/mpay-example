@@ -1,10 +1,11 @@
 import { Env } from '@msafe/mpay-sdk-sui';
 
-import { createStream, setup } from '@/lib/mpay';
+import { claimAllStreams, createStream, setup } from '@/lib/mpay';
 import { sleep } from '@/lib/utils';
 
 async function createCancelStreamAndClaim() {
   const { mpay, wallet } = setup(Env.dev);
+  await claimAllStreams(mpay, wallet);
 
   // Create a stream last for 10s
   const stream = await createStream(mpay, await wallet.address(), wallet, { steps: 10n });

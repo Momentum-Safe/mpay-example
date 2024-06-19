@@ -1,10 +1,11 @@
 import { Env, StreamStatus } from '@msafe/mpay-sdk-sui';
 
-import { createStreamGroup, getIncomingStreams, setup } from '@/lib/mpay';
+import { claimAllStreams, createStreamGroup, getIncomingStreams, setup } from '@/lib/mpay';
 import { sleep } from '@/lib/utils';
 
 async function createStreamGroupAndClaim() {
   const { mpay, wallet } = setup(Env.dev);
+  await claimAllStreams(mpay, wallet);
 
   // Create multiple streams, these stream will share the same group ID for backend for
   // indexing;
@@ -13,8 +14,9 @@ async function createStreamGroupAndClaim() {
 
   // Wait for backend to index and get incoming stream group.
   await sleep(5000);
-  const incomings = await getIncomingStreams(mpay, { status: StreamStatus.STREAMING });
-  if (incomings.length !== 1 || incomings[0]!.type !== 'StreamGroup') {
+  const outgoings = await getIncomingStreams(mpay, { status: StreamStatus.STREAMING });
+  console.log(outgoings, outgoings.length);
+  if (outgoings.length !== 1 || outgoings[0]!.type !== 'StreamGroup') {
     throw new Error('stream group not expected');
   }
 

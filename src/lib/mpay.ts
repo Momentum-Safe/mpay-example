@@ -6,6 +6,7 @@ import {
   IStreamGroup,
   MPayClient,
   StreamGroup,
+  StreamStatus,
 } from '@msafe/mpay-sdk-sui';
 import { SUI_TYPE_ARG } from '@mysten/sui.js/utils';
 
@@ -106,4 +107,24 @@ export async function getIncomingStreams(mpay: MPayClient, query?: IncomingStrea
     streams.push(...st);
   }
   return streams;
+}
+
+export async function claimAllStreams(mpay: MPayClient, wallet: LocalWallet) {
+  const incomings = await getIncomingStreams(mpay, { status: StreamStatus.STREAMING });
+  for (let i = 0; i < incomings.length; i++) {
+    const s = incomings[i];
+    if (!s) {
+      return;
+    }
+    if (s.type === 'Stream') {
+      const txb = await s.claim();
+      await wallet.signAndSubmitTransaction(txb);
+    } else {
+      for (let j = 0; j < s.streams.length; j++) {
+        const st = s.streams[j]!;
+        const txb = await st.claim();
+        await wallet.signAndSubmitTransaction(txb);
+      }
+    }
+  }
 }

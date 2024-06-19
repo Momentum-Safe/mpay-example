@@ -1,10 +1,11 @@
 import { Env, Stream, StreamStatus } from '@msafe/mpay-sdk-sui';
 
-import { createStream, getIncomingStreams, setup } from '@/lib/mpay';
+import { claimAllStreams, createStream, getIncomingStreams, setup } from '@/lib/mpay';
 import { sleep } from '@/lib/utils';
 
 async function createSingleStreamAndClaim() {
   const { mpay, wallet } = setup(Env.dev);
+  await claimAllStreams(mpay, wallet);
 
   // Create a stream, and wait for backend indexer
   const stream = await createStream(mpay, await wallet.address(), wallet);
